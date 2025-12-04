@@ -42,4 +42,8 @@ public class TeacherService {
 
         teacherRepository.delete(oldTeacher);
     }
+
+    public Teacher findTeacherById(Integer id){
+        return teacherRepository.findTeacherById(id);
+    }
 }
