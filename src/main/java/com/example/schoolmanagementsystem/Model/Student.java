@@ -14,19 +14,18 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Course {
-
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(columnDefinition = "varchar(20) not null")
     private String name;
+    @Column(columnDefinition = "int not null")
+    private Integer age;
+    @Column(columnDefinition = "varchar(30) not null")
+    private String major;
 
-    @ManyToOne
+    @ManyToMany
     @JsonIgnore
-    private Teacher teacher;
-
-    @ManyToMany(mappedBy = "courses")
-    private Set<Student> students;
-
+    private Set<Course> courses;
 }

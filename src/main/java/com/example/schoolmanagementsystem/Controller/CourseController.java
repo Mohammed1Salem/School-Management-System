@@ -50,4 +50,15 @@ public class CourseController {
     public ResponseEntity<?> getTeacherName(@PathVariable Integer courseId) {
         return ResponseEntity.status(200).body(courseService.teacherInformation(courseId));
     }
+
+    @GetMapping("get-students-in-course/{id}")
+    public ResponseEntity<?> getStudentsInCourse(@PathVariable Integer id) {
+        return ResponseEntity.status(200).body(courseService.getStudentsInCourse(id));
+    }
+
+    @PutMapping("assign-student-and-course/{studentId}/{courseId}")
+    public ResponseEntity<?> put(@PathVariable Integer studentId, @PathVariable Integer courseId) {
+        courseService.assignStudentAndCourse(studentId,courseId);
+        return ResponseEntity.status(200).body(new ApiResponse("Course and student assigned to each other"));
+    }
 }

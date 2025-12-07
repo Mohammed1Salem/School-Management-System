@@ -3,13 +3,16 @@ package com.example.schoolmanagementsystem.Service;
 import com.example.schoolmanagementsystem.Api.ApiException;
 import com.example.schoolmanagementsystem.DTO.TeacherDTO;
 import com.example.schoolmanagementsystem.Model.Course;
+import com.example.schoolmanagementsystem.Model.Student;
 import com.example.schoolmanagementsystem.Model.Teacher;
 import com.example.schoolmanagementsystem.Repository.CourseRepository;
+import com.example.schoolmanagementsystem.Repository.StudentRepository;
 import com.example.schoolmanagementsystem.Repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +20,7 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
 
     public List<Course> get(){
         return courseRepository.findAll();
@@ -58,5 +62,22 @@ public class CourseService {
         if (teacher == null) throw new ApiException("Teacher not found");
 
         return new TeacherDTO(teacher.getName(), teacher.getAge(),teacher.getEmail(),teacher.getSalary());
+    }
+
+    public Set<Student> getStudentsInCourse(Integer id){
+        return courseRepository.findCourseById(id).getStudents();
+    }
+
+    public void assignStudentAndCourse(Integer studentId, Integer courseId){
+        Student student = studentRepository.findStudentById(studentId);
+        Course course = courseRepository.findCourseById(courseId);
+
+        if (student == null || course == null) throw new ApiException("student or course not found");
+
+        student.getCourses().add(course);
+        course.getStudents().add(student);
+
+        studentRepository.save(student);
+        courseRepository.save(course);
     }
 }
